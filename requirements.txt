@@ -1,0 +1,6 @@
+pymongo
+#typing
+uvicorn[standard]
+fastapi
+xlrd
+jinja2

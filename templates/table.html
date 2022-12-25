@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Set</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.5/dist/flowbite.min.css" />
+    <script>
+        function openAdd() {
+            window.open("/api/add", "Form Window", "width=600,height=650");
+        }
+
+        function openEdit(id) {
+            window.open("/api/edit/" + id, "Form Window", "width=600,height=650");
+        }
+
+        // $(document).ready(function() {});
+
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                document.getElementById("dis").style.display = "none"
+            } catch (e) {
+                alert(e)
+            }
+        });
+
+        function del(id) {
+            try {
+                fetch("/api/delete/" + id).then(response => response.json())
+                    .then(data => {
+                        if (data["successful"] === "true") {
+                            alert("Successfuly Deleted")
+                            window.location.reload();
+                        } else {
+                            alert("Error")
+                        }
+                    });
+            } catch (e) {
+                alert(e)
+            }
+        }
+
+        function semHighest(sem) {
+            document.getElementById("menu-item-0")
+            try {
+                fetch("/api/semHighest" + "?sem=" + sem).then(response => response.json())
+                    .then(data => {
+                        if (data["successful"] === "True") {
+                            document.getElementById("valShow").textContent = "The person who scored highest is Name: " + data["name"] + " USN: " + data["usn"] + " Semester: " + data["sem"] + " Gender: " + data["gender"]
+                        } else {
+                            alert("Error")
+                        }
+                    });
+            } catch (e) {
+                alert(e)
+            }
+        }
+
+        function genderHighest(sem) {
+            document.getElementById("menu-item-1")
+            try {
+                fetch("/api/genderHighest" + "?sem=" + sem).then(response => response.json())
+                    .then(data => {
+                        if (data["successful"] == "True") {
+                            document.getElementById("valShow").textContent = "The gender which has scored highest in semester " + sem + " is " + data["gender"]
+                        } else {
+                            alert("Error")
+                        }
+                    });
+            } catch (e) {
+                alert(e)
+            }
+        }
+
+        function averageHighest() {
+            document.getElementById("menu-item-2")
+            try {
+                fetch("/api/averageHighest").then(response => response.json())
+                    .then(data => {
+                        if (data["successful"] == "True") {
+                            document.getElementById("valShow").textContent = "The semester which has highest average in " + data["sem"]
+                        } else {
+                            alert("Error")
+                        }
+                    });
+            } catch (e) {
+                alert(e)
+            }
+        }
+
+        function tog() {
+            try {
+                var dis = document.getElementById("dis")
+                if (dis.style.display == "none") {
+                    dis.style.display = "initial" // "revert" 
+                } else {
+                    dis.style.display = "none"
+                }
+            } catch (e) {
+                alert(e)
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex flex-col">
+        <div class="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
+            <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="grid items-center justify-center">
+                    <div class="flex">
+                        <div class="w-full items-center justify-center p-12">
+                            <!-- Form -->
+                            <div>
+                                <div class="p-5 md:grid md:grid-cols-3 md:gap-6 ">
+                                    <div class="mt-5 md:col-span-2 md:mt-0 ">
+                                        <form action="# " method="POST ">
+                                            <div class="shadow sm:overflow-hidden sm:rounded-md ">
+                                                <div class="space-y-6 bg-white px-4 py-5 sm:p-6 ">
+                                                    <div class="grid grid-cols-3 gap-6 ">
+                                                        <div class="col-span-3 sm:col-span-2 ">
+                                                            <label for="company-website " class="block text-sm font-medium text-gray-700 ">Queries</label>
+
+                                                            <div class="mt-1 flex rounded-md shadow-sm ">
+                                                                <!-- <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 ">http://</span> -->
+                                                                <div class="inline-block text-left">
+                                                                    <div>
+                                                                        <button onclick="tog()" type="button" class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                                                                            data-toggle="dropdown" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                                                                            Queries
+                                                                            <!-- Heroicon name: mini/chevron-down -->
+                                                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <span class="inline-flex items-center rounded-l-md px-8 text-lg text-gray-500 " id="valShow">The response will be shown here.</span>
+                                                                <!-- <span class="block w-full flex-2 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ">http://</span> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="dis" class="absolute mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none " role="menu " aria-orientation="vertical " aria-labelledby="menu-button " tabindex="-1 ">
+                                <div class="py-1 " role="none ">
+                                    <!-- Active: "bg-gray-100 text-gray-900 ", Not Active: "text-gray-700 " -->
+                                    <button class="text-gray-700 block px-4 py-2 text-sm " role="menuitem " tabindex="-1 " id="menu-item-0" onclick="semHighest('3')">Semester Highest</button>
+                                    <button class="text-gray-700 block px-4 py-2 text-sm " role="menuitem " tabindex="-1 " id="menu-item-1" onclick="genderHighest('3')">Gender Highest</button>
+                                    <button class="text-gray-700 block px-4 py-2 text-sm " role="menuitem " tabindex="-1 " id="menu-item-2" onclick="averageHighest()">Overall Semester Highest</button>
+                                    <!-- <form method="POST " action="# " role="none ">
+                                        <button type="submit" class="text-gray-700 block w-full px-4 py-2 text-left text-sm " role="menuitem " tabindex="-1 " id="menu-item-3 ">Sign out</button>
+                                    </form> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center py-5">
+                    <button onclick="openAdd()" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-12 border-b-4 border-blue-700 hover:border-blue-500 rounded ">
+                    ADD STUDENTS
+                </button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="overflow-hidden ">
+                <table class="min-w-full ">
+                    <thead class="bg-gray-200 border-b ">
+                        <tr>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">Name</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">USN</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">SEM</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">GENDER</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">MARKS 1</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">MARKS 2</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">MARKS 3</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left ">TOTAL</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left " id="avgHeading">AVERAGE</th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left "></th>
+                            <th scope="col " class="text-sm font-medium text-gray-900 px-6 py-4 text-left "></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(no) %}
+                        <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100 ">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">{{ name[i] }}</td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap ">{{ usn[i] }}</td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap ">{{ sem[i] }}</td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap ">{{ gender[i] }}</td>
+                            {% for mark in marks[i] %}
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap ">{{ mark }}</td>
+                            {% endfor %}
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap ">{{ total[i] }}</td>
+                            <td id="avgValue" class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap ">{{ (total[i]/3) }}</td>
+                            <td class="text-sm text-blue-500 font-bold font-light px-6 py-4 whitespace-nowrap " onclick="openEdit(this.id) " id={{id[i]}}><i class="fas fa-edit "></i></td>
+                            <td class="text-sm text-blue-500 font-bold font-light px-6 py-4 whitespace-nowrap " onclick="del(this.id) " id={{id[i]}}><i class="fa-solid fa-trash "></i></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <footer>
+            <div class="py-10 px-3 text-left">
+                <span class="text-gray-500">Made with <span class="text-red-500">❤️</span> by <a href="https://github.com/heimanpictures" class="text-gray-500 hover:text-blue-300">Akkil</a></span>
+            </div>
+        </footer>
+    </div>
+    <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js "></script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDIT STUDENT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.5/dist/flowbite.min.css" />
+
+    <script>
+        function submitForm() {
+            try {
+                var id = document.forms["form"]["id"].value;
+                var key = document.forms["form"]["key"].value;
+                var value = document.forms["form"]["value"].value;
+                list = ["name", "usn", "sem", "gender", "marks1", "marks2", "marks3", "total"]
+                if (list.indexOf(key) !== -1) {
+                    //alert("/api/update/" + id + "?key=" + key + "&value=" + value)
+                    fetch("/api/update/" + id + "?key=" + key + "&value=" + value)
+                        // method: "POST",
+                        // // body: JSON.stringify({
+                        // //     key: key,
+                        // //     value: value
+                        // // }),
+                        // headers: {
+                        //     "Content-Type": "application/json"
+                        // }
+                        .then(response => response.json())
+                        .then(data => {
+                            window.close();
+                        })
+                        .catch((error) => {
+                            alert('Error:', error);
+                        });
+                } else {
+                    alert("Check your key.")
+                }
+            } catch (e) {
+                alert(e)
+            }
+        }
+    </script>
+</head>
+
+<body class="flex h-screen justify-center">
+    <div id="addform" class="items-center flex items-center justify-center max-w-full">
+        <div class="md:grid md:grid-cols-3 md:gap-6">
+            <div class="mt-5 md:col-span-2 md:mt-0 ">
+                <form name="form" onsubmit="submitForm()" class="flex items-center">
+                    <div class="shadow sm:overflow-hidden sm:rounded-md">
+                        <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
+                            <label for="company-website" class="block text-lg text-bold font-medium text-gray-700">ADD STUDENT</label>
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="col-span-3 sm:col-span-2">
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">ID</span>
+                                        <input type="text" value={{id}} aria-label={{id}} name="id" id="id" class="cursor-not-allowed block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" disabled readonly>
+                                    </div>
+                                    <br>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">KEY</span>
+                                        <input type="text" name="key" id="key" class="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter your key" required>
+                                    </div>
+                                    <br>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">VALUE</span>
+                                        <input type="text" name="value" id="value" class="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter your value" required>
+                                    </div>
+
+                                    <div class="px-4 py-3 sm:px-6 text-center">
+                                        <input type="submit" value="Submit" class="Justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
