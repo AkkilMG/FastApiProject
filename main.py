@@ -14,25 +14,29 @@ templates = Jinja2Templates(directory="templates")
 def home_table(request: Request):
     try:
         data = db.getAll()
-        name = data[0]
-        usn = data[1]
-        sem = data[2]
-        marks = data[3]
-        gender = data[4]
-        total = data[5]
-        id = data[6]
-        context={
-            "request": request,
-            "name": name,
-            "usn": usn,
-            "sem": sem,
-            "marks": marks,
-            "gender": gender,
-            "total": total,
-            "no": len(name),
-            "id": id
-        }
-        return templates.TemplateResponse("table.html", context)
+        # if data == False:
+        #     return templates.TemplateResponse("form.html", context)
+        # else:
+        if 1:
+            name = data[0]
+            usn = data[1]
+            sem = data[2]
+            marks = data[3]
+            gender = data[4]
+            total = data[5]
+            id = data[6]
+            context={
+                "request": request,
+                "name": name,
+                "usn": usn,
+                "sem": sem,
+                "marks": marks,
+                "gender": gender,
+                "total": total,
+                "no": len(name),
+                "id": id
+            }
+            return templates.TemplateResponse("table.html", context)
     except Exception as e:
         return {"successful": "False"}
 

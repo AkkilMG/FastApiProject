@@ -1,16 +1,22 @@
 
 from bson import ObjectId
-from pymongo import MongoClient
+from pymongo import MongoClient #, Connection
+import subprocess
 
 class Database:
-    def __init__(self, url:str):
+    def __init__(self): #, url:str):
         """
         url: MongoDB url
         """
         try:
-            myclient = MongoClient(url)
-            self.mydb = myclient[f"studentDB"]
-            self.mycollection = self.mydb[f"studentCol"]
+            myclient = MongoClient()
+            # connection = Connection()
+            # db = connection["studentDB"]
+            # collection = db["studentCol"]
+            mydb = myclient[f"studentDB"]
+            self.mydb = mydb
+            mycollection = self.mydb[f"studentCol"]
+            self.mycollection = mycollection
         except Exception as e:
             print(f"Error: {e}")
             exit(0)
@@ -141,7 +147,7 @@ class Database:
             exit()
         
 # ============ Database Test ============ #
-# d = Database("mongodb://localhost:27017")
+# d = Database() #"mongodb://localhost:27017")
 # d.insert("Akkil", "4SF21IS006", 3, "Male", [28, 25, 29])
 # id = d.getId("usn", "4SF21IS006")
 # d.update(ObjectId('63a6e144ae24135f7d97206f'), "name", "Akkil M G")
