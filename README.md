@@ -2,4 +2,4 @@
 
 ## NOTE
 
-For every query branch is ignores.
+For every query branch is ignored.
