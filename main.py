@@ -126,18 +126,32 @@ def genderHighest(request: Request, sem: str):
         sem = int(sem)
         male = 0
         female = 0
+        maleNo = 0
+        femaleNo = 0
         try:
             for i in range(0, len(all[4])):
-                if all[2][i] == sem:
+                if (all[2][i] == sem):
                     if all[4][i] == "male":
-                        male+=all[5][i]
+                        male+=all[3][i][0]
+                        maleNo+=1
                     elif all[4][i] == "female":
-                        female+=all[5][i]
+                        female+=all[3][i][0]
+                        femaleNo+=1
+            
         except Exception as e:
             print(e)
-        if (male==0) or (female==0):
+        if (male==0) and (female==0):
             return {"successful": "False", "Erro": "No data available."}
+        try:
+            male = male/maleNo
+        except Exception:
+            pass
+        try:
+            female = female/femaleNo
+        except Exception:
+            pass
 
+        print(f"male->{male}, female->{female}")
         if male > female:
             r = "male"
         else:
