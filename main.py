@@ -104,7 +104,7 @@ def add_entry(request: Request, sem:str):
             #print(i)
             if int(all[2][i]) == sem:
                 if i == 0:
-                    max = all[5][0]
+                    max = (all[5][0]/3)
                     name = all[0][0]
                     usn = all[1][0]
                     sem = all[2][0]
@@ -115,7 +115,10 @@ def add_entry(request: Request, sem:str):
                     usn = all[1][i]
                     sem = all[2][i]
                     gender = all[4][i]
-        return {"successful": "True", "name": name, "usn": usn, "sem": sem, "gender": gender}
+        if max != 0:
+            return {"successful": "True", "name": name, "usn": usn, "sem": sem, "gender": gender}
+        else:
+            return {"successful": "False", "Error": "No data available"}
     except Exception as e:
         return {"successful": "False", "Error": e}
 
@@ -166,16 +169,21 @@ def add_entry(request: Request):
     try:
         all = db.getAll()
         total = []
+        
         for i in range(1,4):
             try:
                 mark = 0
+                no = 0
                 for j in range(0, len(all[2])):
                     if all[2][j] == i:
-                        mark+=all[5][j]
-                no = len(all[3])
-                total.append(mark/no)     
+                        mark+=int(all[5][j]/3)
+                        no+=1
+                if no == 0:
+                    total.append(0)
+                else:
+                    total.append(mark/no)     
             except Exception as e:
-                return {"successful": "False"}
+                return {"successful": "False", "Error": e}
         
         for i in range(0, len(total)):
             if i == 0:
