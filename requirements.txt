@@ -4,3 +4,5 @@ uvicorn[standard]
 fastapi
 xlrd
 jinja2
+python-csv
+openpyxl

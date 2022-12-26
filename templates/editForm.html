@@ -18,28 +18,19 @@
                 var value = document.forms["form"]["value"].value;
                 list = ["name", "usn", "sem", "gender", "marks1", "marks2", "marks3", "total"]
                 if (list.indexOf(key) !== -1) {
-                    //alert("/api/update/" + id + "?key=" + key + "&value=" + value)
                     fetch("/api/update/" + id + "?key=" + key + "&value=" + value)
-                        // method: "POST",
-                        // // body: JSON.stringify({
-                        // //     key: key,
-                        // //     value: value
-                        // // }),
-                        // headers: {
-                        //     "Content-Type": "application/json"
-                        // }
                         .then(response => response.json())
                         .then(data => {
                             window.close();
                         })
                         .catch((error) => {
-                            alert('Error:', error);
+                            window.close();
                         });
                 } else {
                     alert("Check your key.")
                 }
             } catch (e) {
-                alert(e)
+                window.close();
             }
         }
     </script>

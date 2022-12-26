@@ -1,10 +1,13 @@
-from fastapi import FastAPI, Request
+
+import os
+import csv
+from openpyxl import load_workbook
+from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 
 # internal 
 from database.access_db import db
-from utils.fileHandler import *
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -43,9 +46,6 @@ def home_table(request: Request):
 @app.get("/api/create")
 def create_student(name:str, usn:str, sem:str, gender:str, marks1:str, marks2:str, marks3:str):
     try:
-        ch = db.checker("usn", usn)
-        if(ch == True):
-            return {"successful": False}
         marks = [int(marks1), int(marks2), int(marks3)]
         db.insert(name=name, usn=usn, sem=int(sem), gender=gender, marks=marks)
         return {"successful": "True"}
@@ -98,6 +98,71 @@ def edit(request: Request, id: str):
     except Exception as e:
         return {"successful": "False", "Error": e}
 
+@app.post("/uploadfile")
+async def create_upload_file(file: UploadFile):
+    try:
+        with open(f"./Download/{file.filename}", "wb") as f:
+            f.write(await file.read())
+        if ".csv" in file.filename:
+            with open(f'./Download/{file.filename}', 'r') as csv_file:
+                csv_reader = csv.DictReader(csv_file)
+
+                # Iterate over the rows in the CSV file
+                for row in csv_reader:
+                    # Assign the values in the row to variables
+                    name = row['name']
+                    usn = row['usn']
+                    sem = row['sem']
+                    gender = row['gender']
+                    marks1 = row['marks1']
+                    marks2 = row['marks2']
+                    marks3 = row['marks3']
+                    ch = db.checker("usn", usn)
+                    if(ch == False):
+                        marks = [int(marks1), int(marks2), int(marks3)]
+                        db.insert(name=name, usn=usn, sem=int(sem), gender=gender, marks=marks)
+            try:
+                os.remove(f"./Download/{file.filename}")
+            except Exception:
+                pass
+            return {"successful": "True"}
+        elif ".xlsx" in file.filename:
+            workbook = load_workbook(f'./Download/{file.filename}')
+            worksheet = workbook.active
+            try:
+                for row in worksheet.iter_rows():
+                    # data = {}
+                    name = row[0].value
+                    usn = row[1].value
+                    sem = row[2].value
+                    gender = row[3].value
+                    marks1 = row[4].value
+                    marks2 = row[5].value
+                    marks3 = row[6].value
+                    if row[0].value!="name":
+                        ch = db.checker("usn", usn)
+                        if(ch == False):
+                            marks = [int(marks1), int(marks2), int(marks3)]
+                            db.insert(name=name, usn=usn, sem=int(sem), gender=gender, marks=marks)
+                try:
+                    os.remove(f"./Download/{file.filename}")
+                except Exception:
+                    pass
+                return {"successful": "True"}
+            except Exception as e:
+                try:
+                    os.remove(f"./Download/{file.filename}")
+                except Exception:
+                    pass
+                return {"successful": "False", "Error": e}
+    except Exception as e:
+        try:
+            os.remove(f"./Download/{file.filename}")
+        except Exception:
+            pass
+        return {"successful": "True", "Error": e}
+
+
 @app.get("/api/semHighest")
 def add_entry(request: Request, sem:str):
     try:
@@ -105,7 +170,6 @@ def add_entry(request: Request, sem:str):
         sem = int(sem)
         max = 0
         for i in range(0, len(all[2])):
-            #print(i)
             if int(all[2][i]) == sem:
                 if i == 0:
                     max = (all[5][0]/3)
@@ -146,7 +210,7 @@ def genderHighest(request: Request, sem: str):
                         femaleNo+=1
             
         except Exception as e:
-            print(e)
+            return {"successful": "False", "Error": e}
         if (male==0) and (female==0):
             return {"successful": "False", "Erro": "No data available."}
         try:
@@ -157,8 +221,6 @@ def genderHighest(request: Request, sem: str):
             female = female/femaleNo
         except Exception:
             pass
-
-        print(f"male->{male}, female->{female}")
         if male > female:
             r = "male"
         else:
