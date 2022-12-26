@@ -1,6 +1,6 @@
 # FastApiProject
 
-## Vars
+### Vars
 
 - `DATABASE_URL`: MongoDB database link (`dbName`: `studentDB`, `collectionName`: `studentCol`)
 
@@ -16,6 +16,15 @@ uvicorn main:app --reload
 
 #### NOTE
 
-For every query branch is ignored.
+`For every query branch is ignored.`
 
+### Techs Used
 
+- FastApi [include other related dependencies]
+- Tailwindcss
+- FontAwesome
+- PyMongo
+
+## Credits
+
+- **[AkKiL](https://github.com/HeimanPictures/FastApiProject)**
