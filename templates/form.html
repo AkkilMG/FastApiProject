@@ -29,6 +29,7 @@
             var marks1 = document.getElementById("marks1");
             var marks2 = document.getElementById("marks2");
             var marks3 = document.getElementById("marks3");
+            var file = document.getElementById("file-upload");
             if (up.style.display === "none") {
                 name.required = false
                 usn.required = false
@@ -37,6 +38,7 @@
                 marks1.required = false
                 marks2.required = false
                 marks3.required = false
+                file.required = true
                 fo.style.display = "none"
                 up.style.display = "initial"
             } else {
@@ -47,6 +49,7 @@
                 marks1.required = true
                 marks2.required = true
                 marks3.required = true
+                file.required = false
                 fo.style.display = "initial"
                 up.style.display = "none"
             }
@@ -166,11 +169,11 @@
                                                 <div class="flex text-sm text-gray-600">
                                                     <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
                                                 <span>Upload a excel/csv file</span>
-                                                <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                                <input id="file-upload" name="file-upload" type="file" class="sr-only" required>
                                               </label>
-                                                    <p class="pl-1">or drag and drop</p>
+                                                    <!-- <p class="pl-1">or drag and drop</p> -->
                                                 </div>
-                                                <p class="text-xs text-gray-500">xlsx up to 10MB</p>
+                                                <p class="text-xs text-gray-500">Up to 10MB</p>
                                             </div>
                                         </div>
                                     </div>
