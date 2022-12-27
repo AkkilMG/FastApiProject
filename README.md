@@ -11,7 +11,7 @@
 git clone https://github.com/HeimanPictures/FastApiProject
 cd FastApiProject
 pip3 install -r requirements.txt
-uvicorn main:app --reload
+uvicorn main:app
 ```
 
 #### NOTE
