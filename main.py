@@ -2,6 +2,7 @@
 import os
 import csv
 from openpyxl import load_workbook
+from bson import ObjectId
 from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -41,7 +42,8 @@ def home_table(request: Request):
             }
             return templates.TemplateResponse("table.html", context)
     except Exception as e:
-        return {"successful": "False"}
+        return {"successful": "False", "Error": e}
+
 
 @app.get("/api/create")
 def create_student(name:str, usn:str, sem:str, gender:str, marks1:str, marks2:str, marks3:str):
@@ -79,12 +81,48 @@ def delete_student(request: Request, id: str):
 def update_student(id: str, key: str, value:str):
     if id is not None:
         try:
-            db.update(id=id, key=key, value=value)
+            total = 0
+            marks = []
+            if key == "marks1":
+                a = db.find("_id", ObjectId(id))
+                mark = a[0]["marks"]
+                for i in range(0, len(mark)):
+                    if i == 0:
+                        marks.append(int(value))
+                    else:
+                        marks.append(mark[i])
+                for i in marks:
+                    total += int(i)
+            elif key == "marks2":
+                a = db.find("_id", ObjectId(id))
+                mark = a[0]["marks"]
+                for i in range(0, len(mark)):
+                    if i == 1:
+                        marks.append(int(value))
+                    else:
+                        marks.append(mark[i])
+                for i in marks:
+                    total += int(i)
+            elif key == "marks3":
+                a = db.find("_id", ObjectId(id))
+                mark = a[0]["marks"]
+                for i in range(0, len(mark)):
+                    if i == 2:
+                        marks.append(int(value))
+                    else:
+                        marks.append(mark[i])
+                for i in marks:
+                    total += int(i)
+            if (key == "marks1") or (key == "marks2") or (key == "marks3"):
+                db.update(id=id, key="marks", value=marks)
+                db.update(id=id, key="total", value=total)
+            else:
+                db.update(id=id, key=key, value=value)
             return {"successful": "True"}
-        except Exception:
-            return {"successful": "False"}
+        except Exception as e:
+            return {"successful": "False", "Error": e}
     else:
-        return {"successful": "False"}
+        return {"successful": "False", "Error": "Dead"}
 
 @app.get("/api/edit/{id}", response_class=HTMLResponse)
 def edit(request: Request, id: str):

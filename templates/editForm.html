@@ -21,7 +21,12 @@
                     fetch("/api/update/" + id + "?key=" + key + "&value=" + value)
                         .then(response => response.json())
                         .then(data => {
-                            window.close();
+                            if (data["successful"] === "False") {
+                                alert(data["Error"])
+                            } else {
+
+                                window.close();
+                            }
                         })
                         .catch((error) => {
                             window.close();

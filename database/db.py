@@ -131,10 +131,27 @@ class Database:
         value: Value that you need want to update
         """
         try:
-            self.mycollection.update_one({"_id": ObjectId(id)}, {"$set": {f'{key}': f"{value}"}})
+            if key == "sem":
+                value = int(value)
+
+            self.mycollection.update_one({"_id": ObjectId(id)}, {"$set": {f'{key}': value}})
         except Exception as e:
             print(f"Error: {e}")
             exit()
+    
+    # def update_marks(self, id:str, marks1:int, marks2:int, marks3:int):
+    #     """
+    #     id: Id to access the object
+    #     marks1: Marks
+    #     marks2: Marks
+    #     marks3: Marks
+    #     """
+    #     try:
+    #         marks = [marks1, marks2, marks3]
+    #         self.mycollection.update_one({"_id": ObjectId(id)}, {"$set": {'marks': f"{value}"}})
+    #     except Exception as e:
+    #         print(f"Error: {e}")
+    #         exit()
 
     def delete(self, id:str):
         """
@@ -150,6 +167,6 @@ class Database:
 # d = Database() #"mongodb://localhost:27017")
 # d.insert("Akkil", "4SF21IS006", 3, "Male", [28, 25, 29])
 # id = d.getId("usn", "4SF21IS006")
-# d.update(ObjectId('63a6e144ae24135f7d97206f'), "name", "Akkil M G")
+# d.update(ObjectId('63aa7379f0bf5489d499da23'), "marks2", "20")
 # d.delete('63a6e144ae24135f7d97206f')
 # print(d.getAll())
